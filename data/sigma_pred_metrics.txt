@@ -1,0 +1,3 @@
+Total: 53922
+No Convergence: 46
+Time[s]: 269.4060031350018 (745 serial)

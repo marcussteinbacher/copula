@@ -1,0 +1,2 @@
+Calculations: 2622
+Time[s]: 196365.8318132

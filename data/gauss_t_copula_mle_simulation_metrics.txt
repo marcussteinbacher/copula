@@ -1,0 +1,3 @@
+2622 windows a 1e5x20 simulations (incl. distribution fitting to marginals)
+normal [s]: 535.0085098679999
+t [s]: 7007.112541972
