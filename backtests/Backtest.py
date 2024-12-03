@@ -17,6 +17,14 @@ r_rugarch = importr("rugarch")
 
 DESCRIPTION = """The duration of time between VaR violations (no-hits) should ideally be independent and not cluster. Under the null hypothesis of a correctly specified risk model, the no-hit duration should have no memory. Since the only continuous distribution which is memory free is the exponential, the test can conducted on any distribution which embeds the exponential as a restricted case, and a likelihood ratio test then conducted to see whether the restriction holds. Following Christoffersen and Pelletier (2004), the Weibull distribution is used with parameter ‘b=1’ representing the case of the exponential."""
 
+def residuals(mu_pf,var,es):
+    '''
+    Returns the residuals of the realized portfolio returns and the expected tail returns on hit days.
+    '''
+    hits = simple_hits(mu_pf,var)
+    hit_days = hits.loc[hits==True].index
+    return es.loc[hit_days] - mu_pf.loc[hit_days]
+
 
 def zero_mean_test(
     data: pd.DataFrame, true_mu: float = 0, conf_level: float = 0.95

@@ -2,21 +2,30 @@ import pandas as pd
 import numpy as np
 import math as m
 
-def mu(df:pd.DataFrame,weights:np.array=None)->pd.Series:
+def mu(df:pd.DataFrame|np.ndarray,weights:np.array=None)->pd.Series:
     """
     Calculates the portfolio return series for a dataframe of single asset returns with individual {weights}.
     If weights are not specified equal weights are applied.
     """
+    ndarray=False
+    
     n_assets = df.shape[1]
 
     #Default to equal weights if not specified
     if not weights:
-        weights = np.array([1/n]*n_assets)
+        weights = np.array([1/n_assets]*n_assets)
+        
     #Some sanity checks
     assert m.isclose(np.sum(weights),1)
     assert len(weights) == n_assets
 
-    return df.apply(lambda row: weights.T.dot(row),axis=1)
+    if isinstance(df,np.ndarray):
+        ndarray = True
+        df = pd.DataFrame(df)
+
+    mu_pfs = df.apply(lambda row: weights.T.dot(row),axis=1)
+    
+    return mu_pfs.to_numpy() if ndarray else mu_pfs
 
 def std(df:pd.DataFrame,period:int=250,weights:np.array=None)->pd.Series:
     """
