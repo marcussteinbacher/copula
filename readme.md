@@ -33,6 +33,7 @@ From a mathematical point of view this is a simple “quantile of the profit-and
 Although it’s conceptual simplicity and ease of computation made VaR the usual financial risk measure, Artzner et al. (1999) indicate some major theoretical deficiencies
 of the concept, first and foremost that it disregards any losses beyond the specified level $\alpha$, a circumstance referred to as ‘tail risk’ (see Yamai & Yoshiba, 2005).
 ![Tail Risk](assets/es_tail_risk.svg) <br>
+
 **Figure 1**: A visual representation of the tail-risk associated with an $\alpha$-level VaR of an aribtrary distribution of portfolio returns.
 
 A preferred *coherent* risk metric that tries to overcome these disadvantages, particularly considering extreme events (see Tasche 2002), is the so-called Expected Shortfall (ES), also known as conditional VaR (CVaR). The term describes the expected loss under the condition of a loss event, i.e. a return realization beyond the $\alpha$-level VaR (see Figure 1, grey). For a random variable $X$, i.e. daily portfolio returns, we denote,
@@ -74,6 +75,7 @@ with ProcessPoolExecutor() as p:
 
 Figure 2 (top) displays an arbitrary window of 250 daily log-returns, Figure 2 (bottom) shows the GARCH(1,1) conditional volatilty as well as the one-period volatility forecast for an arbitrary asset and window.
 ![GARCH(1,1) Volatility Forecast](assets/garch_window.svg)
+
 **Figure 2**: GARCH(1,1) volatility forecast in a window of 250 daily log-returns. <br>
 
 ## 3 Models
@@ -131,6 +133,7 @@ etrs = [expected_shortfall(window) for window in adj_return_windows]
 ```
 Both the series of `quantiles` and `etrs` must be aligned with the realized daily portfolio returns as of `tools.Portfolio.mu`. Figure 3 shows the one-day ahead portfolio return 1%-quantiles *Q* (blue) as well as the expected tail returns beyond the 1%-level *ETR* (red) versus the realized daily portfolio returns (black).
 ![VarCov VaR and ES](assets/var_es_cov.svg)
+
 **Figure 3**: Model 1.c one day-ahead 1%-quantile and expected tail return versus realized portfolio returns.
 
 ### 3.2 Historical Simulation
@@ -144,6 +147,7 @@ from models.HistoricalSimulation import quantile, expected_shortfall
 ```
 A comparison of the day-ahead 1%-quantile *Q* (green) and expected tail return *ETR* (purple) is presented in Figure 4.
 ![HistSim VaR and ES](assets/var_es_hist.svg)
+
 **Figure 4**: Model 2.b one day-ahead 1%-quantile and expected tail return versus realized portfolio returns.
 
 ### 3.3 Copula Models
@@ -187,11 +191,13 @@ etr = np.mean(mu_pf_pred, where=mu_pf_pred<q)
 Applying the procedure above to all 250-trading-day windows in `data.data.adj_return_windows` results in a series of one-day ahead quantile *Q* estimates (see Figure 5).
 
 ![4.b nex-day 1%-quantiles](assets/var_t_mom.svg)
+
 **Figure 5**: Day-ahead 1% portfolio return quantiles for t copula based models with different margin strategies.
 
 The same applies for the next-day expected-tail-returns *ETR*.
 
 ![4.b nex-day 1%-expected tail returns](assets/es_t_mom.svg)
+
 **Figure 6**: Day-ahead 1% portfolio expected tail returns for t copula based models with different margin strategies.
 
 ## 4 Backtests
@@ -200,6 +206,7 @@ The module `backtests` implements several statistical tests for the VaR and the 
 Figure 7 compares the VaR simple hits yielded by the Variance-Covariance model *1.c* and the Historical Simulation model *2.b*.
 
 ![VarCov and HistSim simple hits](assets/hits_cov_hist.svg)
+
 **Figure 7**: Variance-Covariance (1.c) and Historical Simulation (2.b) simple hits.
 
 ```python
@@ -252,6 +259,7 @@ test_result = bootstrap((obs,),statistic,confidence_level=0.99,alternative="grea
 Conducting this bootstrapping test for example for model *1.c* **and** model *2.b* results in Figure 8.
 
 ![Zero-mean bootstrap test 1.c and 2.a](assets/es_test_1c_2b.svg)
+
 **Figure 8**: Zero-mean residual bootstrapping test for the Variance-Covariance model *1.c* and the Historical Simulation *2.b*.
 
 We see that for both models the hypothesized value 0 lies outside the specified confidence interval thus indicating a systemtically underestimated ES.
