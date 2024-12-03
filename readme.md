@@ -36,19 +36,21 @@ of the concept, first and foremost that it disregards any losses beyond the spec
 **Figure 1**: A visual representation of the tail-risk associated with an $\alpha$-level VaR of an aribtrary distribution of portfolio returns.
 
 A preferred *coherent* risk metric that tries to overcome these disadvantages, particularly considering extreme events (see Tasche 2002), is the so-called Expected Shortfall (ES), also known as conditional VaR (CVaR). The term describes the expected loss under the condition of a loss event, i.e. a return realization beyond the $\alpha$-level VaR (see Figure 1, grey). For a random variable $X$, i.e. daily portfolio returns, we denote,
-$$
+```math
 ES_{\alpha} = E[X|X<VaR_{\alpha}].
-$$
+```
+
 Finally, VaR and ES are backtestet using several statistical tests.
 This study is organized in several modules: The `models` module contains classes and functions for the different resolution methods, e.g. *Historical Simulation*, *t-Copula Simulation*, etc., the module `backtests` implements different statistical tests for backtesting VaR and ES, and the module `tools` contains frequently used helper functions. The fundamental data used is prepared in `data`.
 
 ## 2 GARCH(1,1) Adjusted Returns
 To account for the heteroskedasticity of financial time series all models are based upon volatility-adjusted daily log-returns $\tilde{r}_t$, where each return an a roling window of 250 trading days is adjusted to the current level of volatility,
-$$
+
+```math
 \begin{equation}
 \tilde{r}_t = \frac{\sigma_{T}}{\sigma_t}  r_{t}
 \end{equation}
-$$
+```
 
 where $T$ is the relative index at the end of each window and the time series $\sigma$ is a series of GARCH(1,1) volatility foecasts based on the last 250 log-returns `df_sigma_pred`.<br>
 
@@ -69,12 +71,15 @@ with ProcessPoolExecutor() as p:
     for ticker,res in tqdm(p.map(func,tickers),total=len(tickers)):
         df_sigma_pred.loc[:,ticker] = res
 ```
+
 Figure 2 (top) displays an arbitrary window of 250 daily log-returns, Figure 2 (bottom) shows the GARCH(1,1) conditional volatilty as well as the one-period volatility forecast for an arbitrary asset and window.
 ![GARCH(1,1) Volatility Forecast](assets/garch_window.svg)
 **Figure 2**: GARCH(1,1) volatility forecast in a window of 250 daily log-returns. <br>
+
 ## 3 Models
 To derive next-day VaR and ES forecast all models are applied to rolling windows of 250 volatility-adjusted portfolio returns `adj_return_windows`. <br>
 With the previously calculated time series of predicted volatilities `df_sigma` and the series of daily log-returns `df_r`, these windows are,
+
 ```python
 from numpy.lib.stride_tricks import sliding_window_view
 
@@ -94,11 +99,13 @@ adj_return_windows = r_windows*adj_factor_windows
 ### 3.1 Variance-Covariance
 The linear-parametric variance-covariance model, called *1.c*, assumes that asset returns are multivariate normally distributed and is built upon the assumption of constant portfolio standard deviation over a certain period. <br>
 The day-ahead VaR expressed as a simple $\alpha$-quantile of  portfolio return observations $Q_\alpha$ is given by,
-$$
+
+```math
 \begin{equation}
 Q_{\alpha,t+1} = \mu_{pf,t} +\sigma_{pf,t} \Phi^{-1}(\alpha) 
 \end{equation}
-$$ 
+```
+
 where $\mu_{pf,t}$ and $\sigma_{pf,t}$ are the day-*t* expected portfolio return and standard deviation, and $\Psi^{-1}(\alpha)$ is the standard normal $\alpha$-quantile.
 
 ```python
@@ -110,11 +117,12 @@ quantiles = [quantile(window) for window in adj_return_windows]
 ```
 
 For the next-day ES, expressed as the expected return below the $\alpha$-quantile $ETR_\alpha$, I denote,
-$$
+
+```math
 \begin{equation}
 ETR_{\alpha,t+1} =\frac{1}{\alpha} \int_{-\infty}^{Q_{\alpha,t+1}} x f(x)dx
 \end{equation}
-$$
+```
 
 ```python
 from models.VarianceCovariance import expected_shortfall
