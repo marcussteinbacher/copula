@@ -39,7 +39,7 @@ of the concept, first and foremost that it disregards any losses beyond the spec
 A preferred *coherent* risk metric that tries to overcome these disadvantages, particularly considering extreme events (see Tasche 2002), is the so-called Expected Shortfall (ES), also known as conditional VaR (CVaR). The term describes the expected loss under the condition of a loss event, i.e. a return realization beyond the $\alpha$-level VaR (see Figure 1, grey). For a random variable $X$, i.e. daily portfolio returns, we denote,
 
 ```math
-ES_{\alpha} = E[X|X<VaR_{\alpha}]
+ES_{\alpha} = E[X|X \lt VaR_{\alpha}]
 ```
 
 Finally, VaR and ES are backtestet using several statistical tests.
