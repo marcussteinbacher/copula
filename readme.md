@@ -30,7 +30,7 @@ Copula functions have emerged as a powerful tool for modelling multivariate dist
 A growing body of scientific literature supposes copula methods as elgant approaches for the estimation of (one-day ahead) market risk metrics.
 The so-called market risk is of crucial concern for financial institutions hence it encompasses the potential for change in the value of a financial position due to fluctuations in the price of the underlying components (see McNeil et al., 2015). One of the most effective and widespread tools for quantifying market risk is the so-called Value-at-Risk (VaR), an estimate of the maximum potential loss over a given time frame associated with a specified confidence level (see Nadarjah & Chan in Longin, 2017). <br>
 From a mathematical point of view this is a simple “quantile of the profit-and-loss (P&L) distribution of a given portfolio over a prescribed holding period” (McNeil & Frey, 2000).
-Although it’s conceptual simplicity and ease of computation made VaR the usual financial risk measure, Artzner et al. (1999) indicate some major theoretical deficiencies
+Although its conceptual simplicity and ease of computation made VaR the usual financial risk measure, Artzner et al. (1999) indicate some major theoretical deficiencies
 of the concept, first and foremost that it disregards any losses beyond the specified level $\alpha$, a circumstance referred to as ‘tail risk’ (see Yamai & Yoshiba, 2005).
 ![Tail Risk](assets/es_tail_risk.svg) <br>
 
@@ -38,7 +38,9 @@ of the concept, first and foremost that it disregards any losses beyond the spec
 
 A preferred *coherent* risk metric that tries to overcome these disadvantages, particularly considering extreme events (see Tasche 2002), is the so-called Expected Shortfall (ES), also known as conditional VaR (CVaR). The term describes the expected loss under the condition of a loss event, i.e. a return realization beyond the $\alpha$-level VaR (see Figure 1, grey). For a random variable $X$, i.e. daily portfolio returns, we denote,
 ```math
-ES_{\alpha} = E[X|X<VaR_{\alpha}].
+\begin{equation}
+ES_{\alpha} = E[X|X<VaR_{\alpha}]
+\end{equation}
 ```
 
 Finally, VaR and ES are backtestet using several statistical tests.
@@ -99,8 +101,8 @@ adj_factor_windows = np.array([window[-1]/window for window in sigma_windows])
 adj_return_windows = r_windows*adj_factor_windows
 ```
 ### 3.1 Variance-Covariance
-The linear-parametric variance-covariance model, called *1.c*, assumes that asset returns are multivariate normally distributed and is built upon the assumption of constant portfolio standard deviation over a certain period. <br>
-The day-ahead VaR expressed as a simple $\alpha$-quantile of  portfolio return observations $Q_\alpha$ is given by,
+The linear-parametric variance-covariance model, called *1.c*, assumes that asset returns are multivariate normally distributed and is built upon the assumption of constant portfolio standard deviation. <br>
+The day-ahead VaR expressed as a simple $\alpha$-quantile of portfolio return observations $Q_\alpha$ is given by,
 
 ```math
 \begin{equation}
@@ -108,7 +110,7 @@ Q_{\alpha,t+1} = \mu_{pf,t} +\sigma_{pf,t} \Phi^{-1}(\alpha)
 \end{equation}
 ```
 
-where $\mu_{pf,t}$ and $\sigma_{pf,t}$ are the day-*t* expected portfolio return and standard deviation, and $\Psi^{-1}(\alpha)$ is the standard normal $\alpha$-quantile.
+where $\mu_{pf,t}$ and $\sigma_{pf,t}$ are the day-*t* expected portfolio return and standard deviation, and $\Phi^{-1}(\alpha)$ is the standard normal $\alpha$-quantile.
 
 ```python
 from models.VarianceCovariance import quantile
@@ -170,10 +172,10 @@ from models.Copulae import tCopulaSimulation
 from data.data import adj_return_windows
 from tools.Portfolio import mu as mu_pf
 
-# Example on just on window
+# Example: One arbitrary window
 window = adj_return_windows[251]
 
-# Method-of-moments calibration with degree-of-freedom copula parameter 3
+# Method-of-moments calibration (fit) with degree-of-freedom copula parameter = 3
 copula = tCopulaSimulation(dispstr="un",df=3,df_fixed=True)
 copula.fit(window, method="itau")
 
