@@ -39,9 +39,7 @@ of the concept, first and foremost that it disregards any losses beyond the spec
 A preferred *coherent* risk metric that tries to overcome these disadvantages, particularly considering extreme events (see Tasche 2002), is the so-called Expected Shortfall (ES), also known as conditional VaR (CVaR). The term describes the expected loss under the condition of a loss event, i.e. a return realization beyond the $\alpha$-level VaR (see Figure 1, grey). For a random variable $X$, i.e. daily portfolio returns, we denote,
 
 ```math
-\begin{equation}
 ES_{\alpha} = E[X|X<VaR_{\alpha}]
-\end{equation}
 ```
 
 Finally, VaR and ES are backtestet using several statistical tests.
@@ -51,9 +49,7 @@ This study is organized in several modules: The `models` module contains classes
 To account for the heteroskedasticity of financial time series all models are based upon volatility-adjusted daily log-returns $\tilde{r}_t$, where each return an a roling window of 250 trading days is adjusted to the current level of volatility,
 
 ```math
-\begin{equation}
 \tilde{r}_t = \frac{\sigma_{T}}{\sigma_t}  r_{t}
-\end{equation}
 ```
 
 where $T$ is the relative index at the end of each window and the time series $\sigma$ is a series of GARCH(1,1) volatility foecasts based on the last 250 log-returns `df_sigma_pred`.<br>
@@ -106,9 +102,7 @@ The linear-parametric variance-covariance model, called *1.c*, assumes that asse
 The day-ahead VaR expressed as a simple $\alpha$-quantile of portfolio return observations $Q_\alpha$ is given by,
 
 ```math
-\begin{equation}
 Q_{\alpha,t+1} = \mu_{pf,t} +\sigma_{pf,t} \Phi^{-1}(\alpha) 
-\end{equation}
 ```
 
 where $\mu_{pf,t}$ and $\sigma_{pf,t}$ are the day-*t* expected portfolio return and standard deviation, and $\Phi^{-1}(\alpha)$ is the standard normal $\alpha$-quantile.
@@ -124,10 +118,9 @@ quantiles = [quantile(window) for window in adj_return_windows]
 For the next-day ES, expressed as the expected return below the $\alpha$-quantile $ETR_\alpha$, I denote,
 
 ```math
-\begin{equation}
 ETR_{\alpha,t+1} =\frac{1}{\alpha} \int_{-\infty}^{Q_{\alpha,t+1}} x f(x)dx
-\end{equation}
 ```
+<br>
 
 ```python
 from models.VarianceCovariance import expected_shortfall
