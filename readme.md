@@ -239,7 +239,7 @@ cc.LRp                                           0.0
 cc.Decision                                Reject H0
 ```
 
-**ES** is backtested with an one-sided bootstrapping test under the null hypothesis that the mean of the residuals of realized portfolio returns and expected tail returns on hit-days is (less than) zero (see McNeil & Frey, 2000). In other words, if the mean of these residuals is significantly greater then zero the model tends to systematically underestimate the ETR.
+**ES** is backtested with an one-sided bootstrapping test against the alternative hypothesis that the mean of the residuals of realized portfolio returns and expected tail returns on hit-days is greater than zero (see McNeil & Frey, 2000). In other words, if the mean of these residuals is significantly greater then zero the model tends to systematically underestimate the ETR.
 
 ```python
 from scipy.stats import bootstrap
